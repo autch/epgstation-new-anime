@@ -1,0 +1,13 @@
+{% for item in items -%}
+■{{ item.startAt }} [{{ item.service.channel.channel }}] {{ item.service.name }} {% if item.reserved %}【予約済】{% endif %}
+{{ item.program.name }}{% if item.program.isFree %}【無料】{% endif %}
+
+{{ item.program.description | default:"" | bogus_wrap:76 | nl2br }}
+
+{% for ext in item.extended -%}
+【{{ ext.title }}】
+{{ ext.value | bogus_wrap:76 | nl2br }}
+
+{% endfor %}
+{{ hr }}
+{% endfor %}
