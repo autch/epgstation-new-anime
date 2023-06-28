@@ -5,6 +5,8 @@ import { formatForMail, prepareRenderPair } from './format';
 import fs = require('fs');
 import yargs = require('yargs');
 import nodemailer = require('nodemailer');
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import Mail from 'nodemailer/lib/mailer';
 
 function loadIgnoreConditions(filename: string) {
     const quote = (str: string) => str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -14,32 +16,16 @@ function loadIgnoreConditions(filename: string) {
     return new RegExp(re);
 }
 
-interface MailTransportConfig {
-    host: string,
-    port: number,
-    name: string,
-    auth: {
-        user: string,
-        pass: string
-    }
-}
-
-interface MailEnvelopeConfig {
-    from: string,
-    to: string,
-    subject: string
-}
-
 interface ConfigFile {
     epgstation: EpgStationConfig,
     mirakurun: MirakurunConfig,
     channelType: Array<ChannelType>,
 
-    transport: MailTransportConfig,
-    envelope: MailEnvelopeConfig
+    transport: SMTPTransport.Options,
+    envelope: Mail.Options
 }
 
-async function sendMail(message: string, transport: MailTransportConfig, envelope: MailEnvelopeConfig) {
+async function sendMail(message: string, transport: SMTPTransport.Options, envelope: Mail.Options) {
     let transporter = nodemailer.createTransport(transport);
 
     let envelopeToSend = {

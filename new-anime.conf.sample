@@ -1,0 +1,25 @@
+{
+    "epgstation": {
+        "BASE": "http://localhost:8888/api"
+    },
+    "mirakurun": {
+        "BASE": "http://localhost:40772/api"
+    },
+    "channelType": ["GR", "BS"],
+
+    "transport": {
+        "host": "smtp.gmail.com",
+        "port": 587,
+        "name": "",
+        "auth": {
+            "user": "",
+            "pass": ""
+        }
+    },
+
+    "envelope": {
+        "from": "epgstation@example.com",
+        "to": "epgstation@example.com",
+        "subject": "[epgstation] 今週の新番組"
+    }
+}
