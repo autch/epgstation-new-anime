@@ -46,6 +46,7 @@ export function prepareRenderPair(filtered: Array<Program>, reserves: Reserves, 
         let info: any = {};
         info['service'] = findService(services ?? [], i.serviceId, i.networkId);
         info['startAt'] = format_date(i.startAt);
+        info['endAt'] = format_date(i.startAt + i.duration)
         info['reserved'] = reserves.reserves.some(r => r.programId === i.id);
         if ('extended' in i) {
             let extended: any = [];

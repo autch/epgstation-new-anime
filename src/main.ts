@@ -25,12 +25,13 @@ interface ConfigFile {
     envelope: Mail.Options
 }
 
-async function sendMail(message: string, transport: SMTPTransport.Options, envelope: Mail.Options) {
+async function sendMail(message: string, transport: SMTPTransport.Options, envelope: Mail.Options, html: string) {
     let transporter = nodemailer.createTransport(transport);
 
     let envelopeToSend = {
         ...envelope,
-        text: message
+        text: message,
+        html: html
     }
 
     return transporter.sendMail(envelopeToSend);
@@ -68,6 +69,12 @@ async function main() {
             type: 'string',
             description: 'Path to mail template',
             default: 'mail.liquid'
+        })
+        .option('html-mail', {
+            alias: 'M',
+            type: 'string',
+            description: 'Path to HTML mail template',
+            default: 'mail.html.liquid'
         })
         .option('nosend', {
             alias: 'n',
@@ -127,11 +134,12 @@ async function main() {
 
     const renderPair = prepareRenderPair(filtered, reserves, services);
     const text = formatForMail(renderPair, args.mail);
+    const html = formatForMail(renderPair, args.htmlMail);
 
     if (args.nosend) {
-        process.stdout.write(text + "\n");
+        process.stdout.write(html + "\n");
     } else {
-        await sendMail(text, config.transport, config.envelope);
+        await sendMail(text, config.transport, config.envelope, html);
     }
 }
 
